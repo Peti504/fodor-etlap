@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Étlapos oldal</title>
+</head>
+<body>
+    <p id="adminstat">admin</p>
+    <input id="adminpw" type="password">
+    <input type="button" value="login" onclick="bejel(adminpw.value)">
+    <div id="elem">
+
+    </div>
+    <div id="etlap">
+        
+    </div>
+</body>
+<script>
+    var xmlreq = new XMLHttpRequest();
+    function bejel(pwd){
+        sendreq("login",pwd);
+    }
+    function sendreq(callname,param){
+        xmlreq.open("POST", "baszas.php?cn="+callname+"&p="+param);
+        xmlreq.send();
+    }
+    xmlreq.onreadystatechange= function(){
+        if(xmlreq.readyState==4 && xmlreq.status==200){
+            var response = this.responseText.split(";");
+            ertek = response[1];
+            switch(response[0]){
+                case"login":
+                document.getElementById("adminstat").innerText= ertek;
+                break;
+                case"fulletlap":
+                document.getElementById("etlap").innerHTML = ertek;
+                break;
+            }
+        }
+    }
+    window.onload = function(){
+        sendreq("fulletlap", "");
+
+
+    }
+
+</script>
+</html>
